@@ -6,4 +6,4 @@ struct klocek
 	klocek *next;
 };
 void push(klocek *klocek1,klocek **pierwszy, klocek **ostatni);
-void pop(klocek **pierwszy);
+klocek pop(klocek **pierwszy);

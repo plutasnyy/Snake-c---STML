@@ -1,35 +1,36 @@
 
 #include "plansza.h"
 #include <iostream>
-void wypelnij(int T[20][20])
+void wypelnij(int **pole,int x,int y)
 {
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < x; i++)
 	{
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < y; j++)
 		{
-			T[i][j] = 0;
+			pole[i][j] = 0;
 		}
 	}
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < y; i++)
 	{
-		T[0][i] = 1;
-		T[19][i] = 1;
-		T[i][0] = 1;
-		T[i][19] = 1;
+		pole[0][i] = 1;
+		pole[x-1][i] = 1;
 	}
-	T[2][3] = 2;
-	T[4][5] = 3;
+	for (int i = 0; i < x; i++)
+	{
+		pole[i][0] = 1;
+		pole[i][y-1] = 1;
+	}
 }
-void lal(sf::RenderWindow &okno, sf::Sprite Sprajty[], int T[20][20])
+void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, int y)
 {
 	okno.clear();
-	for (int i = 0; i < 20; i += 1)
+	for (int i = 0; i < x; i += 1)
 	{
-		for (int j = 0; j < 20; j += 1)
+		for (int j = 0; j < y; j += 1)
 		{
-			if (T[i][j] != 0)
+			if (pole[i][j] != 0)
 			{
-				switch (T[i][j])
+				switch (pole[i][j])
 				{
 				case 1: Sprajty[0].setPosition(i * 20, j * 20); okno.draw(Sprajty[0]); break;
 				case 2: Sprajty[1].setPosition(i * 20, j * 20 ); okno.draw(Sprajty[1]); break;
