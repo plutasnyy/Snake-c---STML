@@ -1,3 +1,7 @@
-﻿  snake.cpp
+﻿  main.cpp
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\main.cpp(19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  plansza.cpp
   Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.exe
   Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.pdb (Partial PDB)

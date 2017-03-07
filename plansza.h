@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+
 //WYPELNIA PLANSZE ZERAMI I USTAWIA WARTOSCI RAMKI na podstawie pola, x,y ROZMIAR a nie ostatnie indeksy
 void wypelnij(int **pole,int x,int y);
 

@@ -1,8 +1,9 @@
 #include "plansza.h"
-#include "kolejka.h"
 #include "snake.h"
+#include "konfiguracja.h"
 #include <windows.h>
-#include <iostream>
+#define MAXSPEED 30
+#define MAXLEVEL 8
 using namespace std;
 
 int main()
@@ -17,8 +18,8 @@ int main()
 
 	srand(time(NULL));
 
-	int rozmiar_x = 30, rozmiar_y = 20, speed = 200, level = 10, punkty = 0, wartosc_pom = 0;
-
+	int rozmiar_x = 50, rozmiar_y = 40, speed = 200, level = 10, punkty = 0, wartosc_pom = 0;
+	//wczytaj_level();//konfiguracja
 	klocek *pierwszy = NULL, *ostatni = NULL, *korzen = NULL, zlap_ostatni;
 	klocek *start = new klocek;
 	klocek *drugi = new klocek;
@@ -26,10 +27,12 @@ int main()
 	start->x = rozmiar_x / 2;
 	drugi->y = start->y = rozmiar_y / 2 ;
 	drugi->x = start->x + 1;
+	start->next = drugi->next = NULL;
 	push(&start, &pierwszy, &ostatni);
 	push(&drugi, &pierwszy, &ostatni);
-	korzen = pierwszy; // do czyszczenia
 
+	sf::RenderWindow okno(sf::VideoMode(rozmiar_x * 20 + 100, rozmiar_y * 20 + 100, 32), "Snake");
+	sf::Event zdarzenie;
 	sf::Sprite Sprajty[4];
 	sf::Texture Tekstury[4];
 
@@ -39,11 +42,9 @@ int main()
 	int **pole = new int*[rozmiar_x];
 	for (int i = 0; i < rozmiar_x; i++)
 		pole[i] = new int[rozmiar_y];
+
 	wypelnij(pole, rozmiar_x, rozmiar_y);//plansza
 	dodaj_robaka(pole,rozmiar_x,rozmiar_y);//plansza
-
-	sf::RenderWindow okno(sf::VideoMode(rozmiar_x * 20 + 100, rozmiar_y * 20 + 100, 32), "Snake");
-	sf::Event zdarzenie;
 
 	while (okno.isOpen())
 	{
@@ -73,7 +74,7 @@ int main()
 			klocek *pom = new klocek; //GLOWA
 			pom->x = ostatni->x;
 			pom->y = ostatni->y;
-			
+			pom->next = NULL;
 			wartosc_pom = kierunek;
 			ustal_pozycje_glowy(wartosc_pom,&pom); //WYZNACZ NOWE POLE NA PODSTAWIE KIERUNKU, snake
 
@@ -92,7 +93,7 @@ int main()
 			push(&pom, &pierwszy, &ostatni);
 
 			//TYL WEZA
-			if (pole[(*pierwszy).x][(*pierwszy).y] == 4)//ZJEDZONY ROBAK, ZAMIANA NA CIALO WEZA
+			if (zjedzony_robak(pole,&pierwszy))//ZJEDZONY ROBAK, ZAMIANA NA CIALO WEZA, snake
 				pole[pierwszy->x][pierwszy->y] = 2;
 			else//USUNIECIE TYLU
 			{
@@ -101,23 +102,24 @@ int main()
 			}
 
 			odswiez(okno, Sprajty, pole, rozmiar_x, rozmiar_y);
-			Sleep(speed);
+			Sleep(MAXSPEED);
 		}
+		
 	}
+	ranking(punkty+5, level, (rozmiar_x - 2)*(rozmiar_y - 2));//konfiguracja, max pkt
 
+	
 	for (int i = 0; i < rozmiar_y; i++)
-	{
-		delete [] pole[i];
-	}
-//	delete [] *pole;
+			delete [] pole[i];
+	
+	delete [] pole;
 	klocek *uchwyt = new klocek;
-//	while ((*korzen).next != NULL)
-//	{
-	//	uchwyt = korzen;
-		//korzen = korzen->next;
-		//delete uchwyt;
-	//}
-	delete uchwyt;
-	delete korzen;
+	while (pierwszy->next != NULL)
+	{
+		uchwyt = pierwszy;
+		pierwszy = pierwszy->next;
+		delete uchwyt;
+	}
+	delete pierwszy;
 	return 0;
 }

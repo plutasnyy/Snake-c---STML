@@ -1,6 +1,4 @@
-
 #include "plansza.h"
-#include <iostream>
 #include <ctime>
 #include <cstdlib>
 void wypelnij(int **pole,int x,int y)
