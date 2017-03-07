@@ -1,6 +1,8 @@
 
 #include "plansza.h"
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 void wypelnij(int **pole,int x,int y)
 {
 	for (int i = 0; i < x; i++)
@@ -35,6 +37,7 @@ void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, in
 				case 1: Sprajty[0].setPosition(i * 20, j * 20); okno.draw(Sprajty[0]); break;
 				case 2: Sprajty[1].setPosition(i * 20, j * 20 ); okno.draw(Sprajty[1]); break;
 				case 3: Sprajty[2].setPosition(i * 20, j * 20); okno.draw(Sprajty[2]); break;
+				case 4: Sprajty[3].setPosition(i * 20, j * 20); okno.draw(Sprajty[3]); break;
 				default: continue;
 				}
 			}
@@ -42,21 +45,25 @@ void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, in
 	}
 	okno.display();
 }
-void wczytaj_sprajty(sf::Sprite Sprajty[],sf::Texture Tekstury[])
+bool wczytaj_sprajty(sf::Sprite Sprajty[],sf::Texture Tekstury[])
 {
-
-	if (Tekstury[0].loadFromFile("ramka.png") && Tekstury[1].loadFromFile("body.png") && Tekstury[2].loadFromFile("robak.png"))
+	if (Tekstury[0].loadFromFile("ramka.png") && Tekstury[1].loadFromFile("body.png") && Tekstury[2].loadFromFile("robak.png") && Tekstury[3].loadFromFile("zjedzony.png"))
 	{
-		Tekstury[0].loadFromFile("ramka.png");
 		Sprajty[0].setTexture(Tekstury[0]);
-		Tekstury[1].loadFromFile("body.png");
 		Sprajty[1].setTexture(Tekstury[1]);
-		Tekstury[2].loadFromFile("robak.png");
 		Sprajty[2].setTexture(Tekstury[2]);
+		Sprajty[3].setTexture(Tekstury[3]);
+		return true;
 	}
-	else
+	else return false;
+}
+void dodaj_robaka(int **pole, int x, int y)
+{
+	int x_robaka, y_robaka;
+	do
 	{
-		std::cout << "Brak grafiki!";
-	}
-
+		x_robaka = rand() % (x - 1) + 1;
+		y_robaka = rand() % (y - 1) + 1;
+	} while (pole[x_robaka][y_robaka] != 0);
+	pole[x_robaka][y_robaka] = 3;
 }

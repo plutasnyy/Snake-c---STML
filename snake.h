@@ -1,2 +1,2 @@
 #pragma once
-#include "kolejka.h""
+void ustal_pozycje_glowy(int kierunek, klocek **pom);

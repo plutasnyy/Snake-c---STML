@@ -6,7 +6,6 @@ void push(klocek **klocek1,klocek **pierwszy, klocek **ostatni)
 	{
 		*pierwszy = *klocek1;
 		*ostatni = *klocek1;
-		std:: cout << "jestem tu";
 	}
 	else
 	{

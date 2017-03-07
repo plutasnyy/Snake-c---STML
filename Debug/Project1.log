@@ -1,4 +1,3 @@
-﻿  main.cpp
-c:\users\kamil\documents\visual studio 2015\projects\project1\project1\snake.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+﻿  snake.cpp
   Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.exe
   Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.pdb (Partial PDB)
