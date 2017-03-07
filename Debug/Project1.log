@@ -1,2 +1,4 @@
-﻿  kolejka.cpp
-c:\users\kamil\documents\visual studio 2015\projects\project1\project1\kolejka.cpp : fatal error C1041: cannot open program database 'C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Project1\Debug\vc140.pdb'; if multiple CL.EXE write to the same .PDB file, please use /FS
+﻿  main.cpp
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\snake.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.exe
+  Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.pdb (Partial PDB)
