@@ -10,31 +10,51 @@ int wczytaj_level()
 	std::cout << 1;
 	return 1;
 }
-
-void ranking(int punkty, int level, int max_pol)
+int ranking(int punkty, int level, int max_pol)
 {
 	int all = punkty * level * 1000 / max_pol;
-	int pom;
-
-	int i = 0;
-	int nr[32];
-
-	FILE *plik = fopen("ranking.txt", "a+");    // otworzenie pliku do odczytu
+	int rozmiar, pozycja = 0, flaga = 0;
+	FILE *plik = fopen("ranking.txt", "r");    // otworzenie pliku do odczytu
 	if (!plik)
 	{
-		puts("Brak pliku numery.txt");
+		puts("Brak pliku ranking.txt");
 	}
-	while (true)
+	fscanf(plik, "%d", &rozmiar);
+	if (rozmiar > 10000)rozmiar = 10000;
+	cout << rozmiar << endl;
+	int *tab =new int [rozmiar+1]; //jedno miejsce wiecej aby dodac
+	for (int i = 0; i < rozmiar; i++)//wczytaj dane i ustal pozycje
 	{
-		//fscanf(plik, "%d\n", &nr[i]);
-		//if (feof(plik) != 0)
-		//	break;
-		//printf("%d %d\n", i + 1, nr[i]);
-		//++i;
-		fprintf(plik, "%d", all);
-		break;
-		
+		fscanf(plik,"%d", &tab[i]);
+		cout << tab[i] << endl;
+		if (flaga == 0 && tab[i] <= all)
+		{
+			flaga = 1;
+			pozycja = i + 1;
+		}
 	}
 	Sleep(500);
 	fclose(plik);
+	tab[rozmiar] = all;
+	flaga = 0;
+	for (int i = rozmiar; i > 0; i--)
+	{
+		flaga = 0;
+		for (int j = i; j > 0; j--)
+		{
+			if (tab[j] > tab[j - 1])swap(tab[j], tab[j - 1]);
+			flaga = 1;
+		}
+		if (flaga == 0) break;
+	}
+
+	FILE *plik2 = fopen("ranking.txt", "w+");
+	fprintf(plik2, "%d\n", rozmiar + 1);
+	for (int i = 0; i < rozmiar + 1; i++)
+		fprintf(plik2, "%d\n", tab[i]);
+	
+	cout << "Pozycja: " << pozycja << "Punkty: " << all;
+	fclose(plik2);
+	Sleep(1000);
+	return pozycja;
 }

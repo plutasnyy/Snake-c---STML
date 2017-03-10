@@ -104,10 +104,8 @@ int main()
 			odswiez(okno, Sprajty, pole, rozmiar_x, rozmiar_y);
 			Sleep(MAXSPEED);
 		}
-		
 	}
-	ranking(punkty+5, level, (rozmiar_x - 2)*(rozmiar_y - 2));//konfiguracja, max pkt
-
+	ranking(punkty, level, (rozmiar_x - 2)*(rozmiar_y - 2));//konfiguracja, max pkt
 	
 	for (int i = 0; i < rozmiar_y; i++)
 			delete [] pole[i];
