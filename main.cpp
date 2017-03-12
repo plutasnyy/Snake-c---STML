@@ -2,28 +2,41 @@
 #include "snake.h"
 #include "konfiguracja.h"
 #include <windows.h>
-#define MAXSPEED 30
-#define MAXLEVEL 8
+#include <iostream>
+#include <string>
 using namespace std;
 
 int main()
 {
 	enum {
 		LEWO=1, PRAWO, GORA , DOL
-	}kierunek=LEWO;
+	}kierunek=LEWO,nowy_kierunek=LEWO;
 
 	enum {
-		GRA, KONIEC
+		GRA, KONIEC, BLAD
 	}stan = GRA;
 
 	srand(time(NULL));
 
-	int rozmiar_x = 50, rozmiar_y = 40, speed = 200, level = 10, punkty = 0, wartosc_pom = 0;
-	//wczytaj_level();//konfiguracja
+	int rozmiar_x = 15, rozmiar_y = 15, max_speed = 0, level = 0, punkty = 0, wartosc_pom = 0, min_speed = 0, skok = 0, speed = 0;
+	string zjedzone_robaki = "Liczba zjedzonych robakow: ";
+	sf::Text tekst;
+	sf::Font font;
+	sf::Sprite Sprajty[4];
+	sf::Texture Tekstury[4];
+
+	if (!font.loadFromFile("RobotoCondensed-Light.ttf") || !wczytaj_sprajty(Sprajty, Tekstury))
+		stan = BLAD;
+	tekst.setFont(font);
+	konfiguracja(rozmiar_x, rozmiar_y, level, max_speed, skok, min_speed, tekst);
+
+	sf::RenderWindow okno(sf::VideoMode(rozmiar_x * 20, rozmiar_y * 20+100, 32), "Snake");
+	sf::Event zdarzenie;
+
 	klocek *pierwszy = NULL, *ostatni = NULL, *korzen = NULL, zlap_ostatni;
 	klocek *start = new klocek;
 	klocek *drugi = new klocek;
-
+	
 	start->x = rozmiar_x / 2;
 	drugi->y = start->y = rozmiar_y / 2 ;
 	drugi->x = start->x + 1;
@@ -31,13 +44,6 @@ int main()
 	push(&start, &pierwszy, &ostatni);
 	push(&drugi, &pierwszy, &ostatni);
 
-	sf::RenderWindow okno(sf::VideoMode(rozmiar_x * 20 + 100, rozmiar_y * 20 + 100, 32), "Snake");
-	sf::Event zdarzenie;
-	sf::Sprite Sprajty[4];
-	sf::Texture Tekstury[4];
-
-	if(!wczytaj_sprajty(Sprajty, Tekstury))
-		stan=KONIEC;
 
 	int **pole = new int*[rozmiar_x];
 	for (int i = 0; i < rozmiar_x; i++)
@@ -59,13 +65,13 @@ int main()
 			if (zdarzenie.type == sf::Event::KeyPressed)
 			{
 				if (zdarzenie.key.code == sf::Keyboard::A)
-					kierunek = LEWO;
+					nowy_kierunek = LEWO;
 				else if (zdarzenie.key.code == sf::Keyboard::W)
-					kierunek = GORA;
+					nowy_kierunek = GORA;
 				else if (zdarzenie.key.code == sf::Keyboard::D)				
-					kierunek = PRAWO;				
+					nowy_kierunek = PRAWO;				
 				else if (zdarzenie.key.code == sf::Keyboard::S)				
-					kierunek = DOL;				
+					nowy_kierunek = DOL;				
 			}
 		}
 		if (stan == GRA)
@@ -75,6 +81,11 @@ int main()
 			pom->x = ostatni->x;
 			pom->y = ostatni->y;
 			pom->next = NULL;
+
+			//BLOKADA RUCHU W TYL
+			if (!(kierunek == LEWO && nowy_kierunek == PRAWO || kierunek == PRAWO && nowy_kierunek == LEWO || kierunek == GORA && nowy_kierunek == DOL || kierunek == DOL &&nowy_kierunek == GORA))
+				kierunek = nowy_kierunek;
+			
 			wartosc_pom = kierunek;
 			ustal_pozycje_glowy(wartosc_pom,&pom); //WYZNACZ NOWE POLE NA PODSTAWIE KIERUNKU, snake
 
@@ -101,11 +112,20 @@ int main()
 				pole[zlap_ostatni.x][zlap_ostatni.y] = 0;
 			}
 
-			odswiez(okno, Sprajty, pole, rozmiar_x, rozmiar_y);
-			Sleep(MAXSPEED);
+			odswiez(okno, Sprajty, pole, rozmiar_x, rozmiar_y, punkty, tekst);//plansza
+
+			speed = min_speed - punkty*skok;
+			if (speed < max_speed)speed = max_speed;
+			Sleep(speed);
 		}
+		else if (stan == BLAD)
+		{
+			cout << "BLAD";
+		}
+		else if(stan==KONIEC)
+			ranking(punkty, level, (rozmiar_x - 2)*(rozmiar_y - 2), tekst);//konfiguracja, max pkt
+		
 	}
-	ranking(punkty, level, (rozmiar_x - 2)*(rozmiar_y - 2));//konfiguracja, max pkt
 	
 	for (int i = 0; i < rozmiar_y; i++)
 			delete [] pole[i];

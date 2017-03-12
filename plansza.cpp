@@ -1,15 +1,14 @@
 #include "plansza.h"
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
+#include <string> //string bo text.substring wymaga stringa
+using namespace std;
 void wypelnij(int **pole,int x,int y)
 {
 	for (int i = 0; i < x; i++)
-	{
 		for (int j = 0; j < y; j++)
-		{
 			pole[i][j] = 0;
-		}
-	}
 	for (int i = 0; i < y; i++)
 	{
 		pole[0][i] = 1;
@@ -21,7 +20,21 @@ void wypelnij(int **pole,int x,int y)
 		pole[i][y-1] = 1;
 	}
 }
-void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, int y)
+string oblicz_punkty(int punkty)
+{
+	string pom = "";
+	char liczba;
+	if (punkty == 0)return "0";
+	while (punkty > 0)
+	{
+		liczba = punkty % 10 + 48;
+		pom += liczba;
+		punkty /= 10;
+	}
+	for (int i = 0; i < pom.size() / 2; i++)swap(pom[i], pom[pom.size() - 1 - i]);
+	return pom;
+}
+void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, int y, int punkty, sf::Text tekst)
 {
 	okno.clear();
 	for (int i = 0; i < x; i += 1)
@@ -41,6 +54,13 @@ void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, in
 			}
 		}
 	}
+	string punkt = oblicz_punkty(punkty);
+	tekst.setString("Zjedzone robaki: ");
+	tekst.setPosition(10, y * 20 + 20);
+	okno.draw(tekst);
+	tekst.setString(punkt);
+	tekst.setPosition(10, y * 20 + 45);
+	okno.draw(tekst);
 	okno.display();
 }
 bool wczytaj_sprajty(sf::Sprite Sprajty[],sf::Texture Tekstury[])

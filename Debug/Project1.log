@@ -1,3 +1,10 @@
-﻿  konfiguracja.cpp
+﻿  plansza.cpp
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\plansza.cpp(34): warning C4018: '<': signed/unsigned mismatch
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\plansza.cpp(48): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\plansza.cpp(49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\plansza.cpp(50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\plansza.cpp(51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\plansza.cpp(59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\kamil\documents\visual studio 2015\projects\project1\project1\plansza.cpp(62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.exe
   Project1.vcxproj -> C:\Users\Kamil\Documents\Visual Studio 2015\Projects\Project1\Debug\Project1.pdb (Partial PDB)
