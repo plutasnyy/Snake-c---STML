@@ -1,5 +1,4 @@
 #include "kolejka.h"
-#include <iostream>
 void push(klocek **klocek1,klocek **pierwszy, klocek **ostatni)
 {
 	if (*pierwszy == NULL)

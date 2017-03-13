@@ -1,9 +1,4 @@
 #include "plansza.h"
-#include <ctime>
-#include <cstdlib>
-#include <iostream>
-#include <string> //string bo text.substring wymaga stringa
-using namespace std;
 void wypelnij(int **pole,int x,int y)
 {
 	for (int i = 0; i < x; i++)
@@ -54,6 +49,7 @@ void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, in
 			}
 		}
 	}
+
 	string punkt = oblicz_punkty(punkty);
 	tekst.setString("Zjedzone robaki: ");
 	tekst.setPosition(10, y * 20 + 20);
@@ -62,6 +58,7 @@ void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, in
 	tekst.setPosition(10, y * 20 + 45);
 	okno.draw(tekst);
 	okno.display();
+
 }
 bool wczytaj_sprajty(sf::Sprite Sprajty[],sf::Texture Tekstury[])
 {

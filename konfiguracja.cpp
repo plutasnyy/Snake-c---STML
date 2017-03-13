@@ -1,41 +1,7 @@
 #include "konfiguracja.h"
-#define _CRT_SECURE_NO_DEPRECATE
-#include <stdio.h>
-#include <iostream>
-#include <Windows.h>
-#include <string>
-using namespace std;
-#pragma warning (disable : 4996)
-int ranking(int punkty, int level, int max_pol, sf::Text tekst)
+void sortuj(int *tab, int rozmiar)
 {
-	sf::RenderWindow okno(sf::VideoMode(500, 300, 32), "Ranking");
-	sf::Event zdarzenie;
-
-	int all = punkty * level * 1000 / max_pol;
-	int rozmiar, pozycja = 0, flaga = 0;
-	FILE *plik = fopen("ranking.txt", "r");    // otworzenie pliku do odczytu
-	if (!plik)
-	{
-		puts("Brak pliku ranking.txt");
-	}
-	fscanf(plik, "%d", &rozmiar);
-	if (rozmiar > 10000)rozmiar = 10000;
-	cout << rozmiar << endl;
-	int *tab =new int [rozmiar+1]; //jedno miejsce wiecej aby dodac
-	for (int i = 0; i < rozmiar; i++)//wczytaj dane i ustal pozycje
-	{
-		fscanf(plik,"%d", &tab[i]);
-		cout << tab[i] << endl;
-		if (flaga == 0 && tab[i] <= all)
-		{
-			flaga = 1;
-			pozycja = i + 1;
-		}
-	}
-	Sleep(500);
-	fclose(plik);
-	tab[rozmiar] = all;
-	flaga = 0;
+	int flaga = 0;
 	for (int i = rozmiar; i > 0; i--)
 	{
 		flaga = 0;
@@ -46,23 +12,107 @@ int ranking(int punkty, int level, int max_pol, sf::Text tekst)
 		}
 		if (flaga == 0) break;
 	}
+}
+bool wyswietl_okno(int all, int pozycja, int *tab, sf::Text &tekst)
+{
+	string slowa = "";
+	slowa += "TWOJE PUNKTY: \n";
+	slowa += oblicz_punkty(all); //plansza
+	slowa += "\n\nTWOJA POZYCJA: \n";
+	slowa += oblicz_punkty(pozycja);
+	slowa += "\n\n TOP 5:\n";
+	char pom;
+	for (int i = 0; i < 5; i++)
+	{
+		pom = i + 49;
+		slowa += pom;
+		slowa += ". ";
+		slowa += oblicz_punkty(tab[i]);
+		slowa += "\n";
+	}
 
-	FILE *plik2 = fopen("ranking.txt", "w+");
-	fprintf(plik2, "%d\n", rozmiar + 1);
-	for (int i = 0; i < rozmiar + 1; i++)
-		fprintf(plik2, "%d\n", tab[i]);
-	
-	cout << "Pozycja: " << pozycja << " Punkty: " << all;
-	fclose(plik2);
-	Sleep(1000);
-	return pozycja;
+	slowa += "\nCzy chcesz zagrac ponownie? 1. TAK 2. NIE";
+	tekst.setString(slowa);
+	tekst.setPosition(10, 10);
+	sf::RenderWindow okno(sf::VideoMode(500, 400, 32), "Ranking");
+	sf::Event zdarzenie;
+	int key = 0;
+	while (okno.isOpen())
+	{
+		okno.clear();
+		okno.draw(tekst);
+		while (okno.pollEvent(zdarzenie))
+		{
+			if (zdarzenie.type == sf::Event::Closed)
+				okno.close();
+
+			if (zdarzenie.type == sf::Event::KeyPressed && zdarzenie.key.code == sf::Keyboard::Escape)
+				okno.close();
+			if (zdarzenie.type == sf::Event::KeyPressed)
+			{
+				if (zdarzenie.key.code == sf::Keyboard::Num1)
+					key = 1;
+				else if (zdarzenie.key.code == sf::Keyboard::Num2)
+					key = 2;
+			}
+		}
+		if (key == 1 || key == 2)
+		{
+			okno.close();
+			if (key == 1)return false;
+			if (key == 2)return true;
+		}
+		okno.display();
+	}
+}
+int ranking(int punkty, int level, int max_pol, sf::Text &tekst)
+{
+	//WCZYTANIE
+	double d_level = (level + 1) / 2;
+	int all = (punkty + 30 )  * d_level * 10000 / max_pol;
+	int rozmiar, pozycja = 0, flaga = 0;
+	FILE *plik = fopen("ranking.txt", "r");    // otworzenie pliku do odczytu
+	if (plik)
+	{
+		fscanf(plik, "%d", &rozmiar);
+		if (rozmiar > 10000)rozmiar = 10000;
+		cout << rozmiar << endl;
+		int *tab = new int[rozmiar + 1]; //jedno miejsce wiecej aby dodac
+		for (int i = 0; i < rozmiar; i++)//wczytaj dane i ustal pozycje
+		{
+			fscanf(plik, "%d", &tab[i]);
+			if (flaga == 0 && tab[i] <= all)
+			{
+				flaga = 1;
+				pozycja = i + 1; //zapisz pozycje
+			}
+		}
+		fclose(plik);
+
+		tab[rozmiar] = all;
+		sortuj(tab, rozmiar); //Sortuje tylko bablem, bo na starcie jest prawie posortowana
+
+		FILE *plik2 = fopen("ranking.txt", "w+");
+		if (plik2)
+		{
+			fprintf(plik2, "%d\n", rozmiar + 1);
+			for (int i = 0; i < rozmiar + 1; i++)
+				fprintf(plik2, "%d\n", tab[i]);
+		}
+		fclose(plik2);
+		flaga=wyswietl_okno(all, pozycja,tab, tekst); // wyswietla okno i zwraca czy kontynuowac gre
+	}
+	else fclose(plik);
+
+	if (flaga == true)return true;
+	else return false;
 }
 
 
 bool konfiguracja(int &rozmiar_x, int &rozmiar_y, int &level, int &max_speed, int &skok, int &min_speed, sf::Text &tekst)
 {
 	sf::RenderWindow okno(sf::VideoMode(500, 300, 32), "Konfiguracja");
-	sf::Event zdarzenie;
+	sf::Event zdarzenie;	
 	int key = 0, flaga = 0, t_rozmiarow[6] = { 15,15,20,20,25,25 };
 	string slowa = "Wybierz poziom trudnosci <1:8> : ";
 	tekst.setString(slowa);
@@ -91,7 +141,7 @@ bool konfiguracja(int &rozmiar_x, int &rozmiar_y, int &level, int &max_speed, in
 			}
 			if (flaga == 2)
 			{
-				Sleep(400);
+				Sleep(400);//zeby nie zniknelo okieno, nie przestawiac nizej, wazna kolejnosc!
 				okno.close();
 			}
 			if (key != 0 && flaga == 0)

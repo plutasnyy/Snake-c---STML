@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream> //bez tego nie dalo sie porownac do NULL
 struct klocek
 {
 	int x;
