@@ -72,13 +72,22 @@ bool wczytaj_sprajty(sf::Sprite Sprajty[],sf::Texture Tekstury[])
 	}
 	else return false;
 }
-void dodaj_robaka(int **pole, int x, int y)
+bool dodaj_robaka(int **pole, int x, int y)
 {
-	int x_robaka, y_robaka;
+	int x_robaka, y_robaka, flaga = 0;
+
+	for (int i = 0; i < x; i++)
+		for (int j = 0; j < y; j++)
+			if (pole[i][j] == 0)
+				flaga = 1;
+	if (flaga == 0)
+		return false;
+
 	do
 	{
 		x_robaka = rand() % (x - 1) + 1;
 		y_robaka = rand() % (y - 1) + 1;
 	} while (pole[x_robaka][y_robaka] != 0);
 	pole[x_robaka][y_robaka] = 3;
+	return true;
 }

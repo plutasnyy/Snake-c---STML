@@ -13,13 +13,15 @@ void sortuj(int *tab, int rozmiar)
 		if (flaga == 0) break;
 	}
 }
-bool wyswietl_okno(int all, int pozycja, int *tab, sf::Text &tekst)
+bool wyswietl_okno(int all, int pozycja, int *tab, sf::Text &tekst,int rozmiar)
 {
 	string slowa = "";
 	slowa += "TWOJE PUNKTY: \n";
 	slowa += oblicz_punkty(all); //plansza
 	slowa += "\n\nTWOJA POZYCJA: \n";
 	slowa += oblicz_punkty(pozycja);
+	slowa += " / ";
+	slowa += oblicz_punkty(rozmiar);
 	slowa += "\n\n TOP 5:\n";
 	char pom;
 	for (int i = 0; i < 5; i++)
@@ -76,7 +78,6 @@ int ranking(int punkty, int level, int max_pol, sf::Text &tekst)
 	{
 		fscanf(plik, "%d", &rozmiar);
 		if (rozmiar > 10000)rozmiar = 10000;
-		cout << rozmiar << endl;
 		int *tab = new int[rozmiar + 1]; //jedno miejsce wiecej aby dodac
 		for (int i = 0; i < rozmiar; i++)//wczytaj dane i ustal pozycje
 		{
@@ -100,7 +101,7 @@ int ranking(int punkty, int level, int max_pol, sf::Text &tekst)
 				fprintf(plik2, "%d\n", tab[i]);
 		}
 		fclose(plik2);
-		flaga=wyswietl_okno(all, pozycja,tab, tekst); // wyswietla okno i zwraca czy kontynuowac gre
+		flaga=wyswietl_okno(all, pozycja,tab, tekst, rozmiar); // wyswietla okno i zwraca czy kontynuowac gre
 	}
 	else fclose(plik);
 

@@ -16,7 +16,7 @@ void odswiez(sf::RenderWindow &okno, sf::Sprite Sprajty[], int **pole, int x, in
 bool wczytaj_sprajty(sf::Sprite Sprajty[],sf::Texture Tekstury[]);
 
 //LOSUJE ROBAKA NA PLANSZY W WOLNYM POLU
-void dodaj_robaka(int **pole, int x, int y);
+bool dodaj_robaka(int **pole, int x, int y); //ZWRACA falsz jesli koniec gry
 
 //INT -> STRING
 string oblicz_punkty(int punkty);

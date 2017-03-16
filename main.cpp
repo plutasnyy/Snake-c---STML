@@ -104,7 +104,8 @@ int main()
 				{
 					punkty++;
 					pole[pom->x][pom->y] = 4;
-					dodaj_robaka(pole, rozmiar_x, rozmiar_y);//plansza
+					if (!dodaj_robaka(pole, rozmiar_x, rozmiar_y))
+						stan = KONIEC;//plansza
 				}
 				else pole[pom->x][pom->y] = 2; //PUSTE POLE wpisuje nowa glowe
 
