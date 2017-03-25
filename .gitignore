@@ -48,4 +48,5 @@ Temporary Items
 Debug
 *vcxproj
 *vcxproj*
+Project1.vcxproj.filters
 *.dll
